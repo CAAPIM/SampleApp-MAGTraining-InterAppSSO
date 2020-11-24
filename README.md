@@ -1,0 +1,1 @@
+# SampleApp-MAGTraining-InterAppSSO
