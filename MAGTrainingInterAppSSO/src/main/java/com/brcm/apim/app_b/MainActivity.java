@@ -88,25 +88,9 @@ public class MainActivity extends AppCompatActivity {
     private String mEmulatorLocation=null;
     private Button mLoginButton=null;
     private Button mLogoutButton=null;
-    private Button mUnProtectedAPIButton=null;
-
-    private TextView mJsonResponseTextView=null;
     private TextView mUserAuthenticatedStatus=null;
     private ProgressBar mProgressBar=null;
     private ProgressBar mFileUploadProgressBar=null;
-
-    private Button mSessionTransferButton=null;
-    private Button mBleButton=null;
-
-    private Switch mScreenLockSwitch=null;
-    private Button mProtectedAPIButton=null;
-    private Button mFileUpLoadButton=null;
-
-    private String mCurrentPhotoPath;
-
-    protected MASProximityLoginBLEPeripheralListener mBLEPeripheralListener;
-
-    static final int REQUEST_IMAGE_CAPTURE = 1;
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -140,24 +124,12 @@ public class MainActivity extends AppCompatActivity {
 
         mLoginButton = findViewById(R.id.loginButton);
         mLogoutButton = findViewById( R.id.logoutButton );
-        // mUnProtectedAPIButton = findViewById(  R.id.unProtectedAPIButton );
-
-        //  mJsonResponseTextView = findViewById( R.id.jsonResponseData );
         mProgressBar = findViewById( R.id.progressBar );
         mFileUploadProgressBar = findViewById( R.id.hProgressBar );
         mUserAuthenticatedStatus = findViewById( R.id.userStatusTextView );
-        // mSessionTransferButton = findViewById( R.id.sessionTransferButton );
-        // mBleButton = findViewById( R.id.bleTransferButton );
-
-        // mScreenLockSwitch = (Switch)findViewById( R.id.sessionLockSwitch );
-
-        //  mProtectedAPIButton = (Button)findViewById( R.id.protectedAPIButton );
 
         mProgressBar.setVisibility( View.INVISIBLE );
         mFileUploadProgressBar.setVisibility( View.GONE );
-
-        // mFileUpLoadButton = findViewById( R.id.fileUpLoadButton );
-
         //
         // We need to ensure the location service is available on the emulator and real device
         //
@@ -246,18 +218,6 @@ public class MainActivity extends AppCompatActivity {
         //
         refreshDialogStatus();
 
-
-        //
-        // Set Up the various Button Listeners
-        //
-
-
-        //
-        // Define the unprotected API Button listener
-        //
-
-
-
         //
         // Defined the Login Buttton listener
         //
@@ -266,8 +226,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 Log.d( TAG, "Login Button has been clicked" );
-
-                // mJsonResponseTextView.setText( "" );
 
                 MASUser.login( new MASCallback<MASUser>() {
                     @Override
@@ -312,145 +270,8 @@ public class MainActivity extends AppCompatActivity {
                         }
                     } );
                 }
-
-
             }
         } );
-
-
-
-
-
-    }
-
-    protected void initiatePeripheralBLE() {
-        if (mBLEPeripheralListener == null) {
-            mBLEPeripheralListener = new MASProximityLoginBLEPeripheralListener() {
-                @Override
-                public void onStatusUpdate(int state) {
-                    String result = "BLE ";
-                    switch (state) {
-                        case MASProximityLoginBLEPeripheralListener.BLE_STATE_CONNECTED:
-                            result += "client connected";
-                            break;
-                        case MASProximityLoginBLEPeripheralListener.BLE_STATE_DISCONNECTED:
-                            result += "client disconnected";
-                            break;
-                        case MASProximityLoginBLEPeripheralListener.BLE_STATE_STARTED:
-                            result += "peripheral mode started";
-                            break;
-                        case MASProximityLoginBLEPeripheralListener.BLE_STATE_STOPPED:
-                            result += "peripheral mode stopped";
-                            break;
-                        case MASProximityLoginBLEPeripheralListener.BLE_STATE_SESSION_AUTHORIZED:
-                            result += "session authorized";
-                            break;
-                    }
-
-                    Log.d(TAG, result);
-                }
-
-                @Override
-                public void onError(int errorCode) {
-                    String result = "BLE ";
-                    switch (errorCode) {
-                        case MASProximityLoginBLEPeripheralListener.BLE_ERROR_ADVERTISE_FAILED:
-                            result += "advertise failed.";
-                            break;
-                        case MASProximityLoginBLEPeripheralListener.BLE_ERROR_AUTH_FAILED:
-                            result += "authorize failed.";
-                            break;
-                        case MASProximityLoginBLEPeripheralListener.BLE_ERROR_CENTRAL_UNSUBSCRIBED:
-                            result += "central unsubscribed.";
-                            break;
-                        case MASProximityLoginBLEPeripheralListener.BLE_ERROR_PERIPHERAL_MODE_NOT_SUPPORTED:
-                            result += "peripheral mode not supported.";
-                            break;
-                        case MASProximityLoginBLE.BLE_ERROR_DISABLED:
-                            result += "disabled.";
-                            break;
-                        case MASProximityLoginBLE.BLE_ERROR_INVALID_UUID:
-                            result += "invalid UUID.";
-                            break;
-                        case MASProximityLoginBLE.BLE_ERROR_NOT_SUPPORTED:
-                            result += "not supported.";
-                            break;
-                        case MASProximityLoginBLE.BLE_ERROR_SESSION_SHARING_NOT_SUPPORTED:
-                            result += "session sharing not supported.";
-                            break;
-                        default:
-                            result += "unknown errorCode " + errorCode;
-                    }
-
-                    Log.d(TAG, result);
-                }
-
-                @Override
-                public void onConsentRequested(final Context context, final String deviceName, final MASProximityLoginBLEUserConsentHandler handler) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                            builder.setMessage("Do you want to grant session to " + deviceName + "?")
-                                    .setPositiveButton("Grant", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            // Authorize
-                                            handler.proceed();
-                                        }
-                                    })
-                                    .setNegativeButton("Reject", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            // Deny
-                                            handler.cancel();
-                                        }
-                                    }).show();
-                        }
-                    });
-                }
-            };
-        }
-
-        MASDevice.getCurrentDevice().startAsBluetoothPeripheral(mBLEPeripheralListener);
-        Log.d(TAG, "Started as peripheral.");
-    }
-
-    private Switch.OnCheckedChangeListener getLockListener(final MainActivity activity) {
-        return new Switch.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                if (isChecked) {
-
-                    if (MASUser.getCurrentUser() != null && !MASUser.getCurrentUser().isSessionLocked()) {
-                        MASUser.getCurrentUser().lockSession( null );
-                        refreshDialogStatus();
-                        Log.d(TAG, "User Session is locked due to user throwing the dialog switch");
-                    }
-
-                } else {
-                    MASUser.getCurrentUser().unlockSession(getUnlockCallback(activity));
-                }
-            }
-        };
-    }
-
-
-    private MASCallback<Void> getLockCallback() {
-        mProgressBar.setVisibility(View.GONE);
-
-        return new MASCallback<Void>() {
-            @Override
-            public void onSuccess(Void result) {
-                refreshDialogStatus();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Log.d( "State", e.toString() );
-            }
-        };
     }
 
     private int REQUEST_CODE = 0x1000;
@@ -488,232 +309,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-
-        //
-        // Are we processing a camera capture event
-        //
-        if (requestCode == REQUEST_IMAGE_CAPTURE) {
-            if (resultCode == RESULT_OK)
-            {
-                Log.d( "STATE", "Processing the photo image returned" );
-
-
-                //
-                // Here we do the multipart transfer of the photo using the store captured image
-                //
-
-                MASFileObject filePart = new MASFileObject();
-                MultiPart multiPart = new MultiPart();
-
-                filePart.setFieldName("file1");
-
-
-                //
-                // Get the file name from the full pathand extract the file bytes for actual upload
-                //
-
-                if (data == null) {
-                    filePart.setFileName( mCurrentPhotoPath.substring( mCurrentPhotoPath.lastIndexOf( "/" ) + 1 ) );
-
-                    try {
-                        String extension = MimeTypeMap.getFileExtensionFromUrl(mCurrentPhotoPath);
-                        final String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
-
-                        //
-                        // Set the Mime Type for upload
-                        //
-
-                        filePart.setFileType(mimeType);
-                        filePart.setFileBytes( getFileBytes( mCurrentPhotoPath ) );
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                } else {
-                    Uri selectedImage =  data.getData();
-                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
-                    if (selectedImage != null) {
-                        Cursor cursor = getContentResolver().query( selectedImage,
-                                filePathColumn, null, null, null );
-                        if (cursor != null) {
-                            cursor.moveToFirst();
-
-                            int columnIndex = cursor.getColumnIndex( filePathColumn[0] );
-                            String picturePath = cursor.getString( columnIndex );
-                            Log.d(TAG, "Select file path is" + picturePath);
-                            try {
-                                filePart.setFileName( picturePath.substring( picturePath.lastIndexOf( "/" ) + 1 ) );
-
-                                //
-                                // Set the Mime Type for upload
-                                //
-                                String extension = MimeTypeMap.getFileExtensionFromUrl(picturePath);
-                                final String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
-                                filePart.setFileType(mimeType);
-
-
-                                filePart.setFileBytes( getFileBytes( picturePath ) );
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-
-                        }
-                    }
-
-                    // Got a selected image from the Android device library instead
-
-                }
-                multiPart.addFilePart(filePart);
-
-
-                Uri uri = new Uri.Builder().path("/test/multipart/").build();
-
-
-
-                //
-                //
-                //
-
-
-
-                //Create object of class implementing MASProgressListener
-                MASProgressListener progressListener = new MASProgressListener() {
-                    @Override
-                    public void onProgress(String progressPercent) {
-                        Log.d( TAG, "Percentage complate is: [" + progressPercent + "]" );
-                        final int intProgressPercentage = Integer.parseInt( progressPercent.toString());
-
-                        runOnUiThread( new Runnable() {
-                            @Override
-                            public void run() {
-                                if (intProgressPercentage == 1)
-                                    mFileUploadProgressBar.setVisibility( View.VISIBLE );
-                                mFileUploadProgressBar.setProgress( intProgressPercentage );
-                            }
-                        });
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        //Upload complete
-                        Log.d(TAG, "Upload complete");
-
-                        runOnUiThread( new Runnable() {
-                            @Override
-                            public void run() {
-                                mFileUploadProgressBar.setVisibility( View.GONE );
-                            }
-                        });
-
-                    }
-
-                    @Override
-                    public void onError(MAGError error) {
-                        //Upload error
-
-                    }
-                };
-
-                try {
-
-                    final MASRequest request = new MASRequest.MASRequestBuilder(uri).build();
-
-                    mProgressBar.setVisibility( View.VISIBLE );
-                    MAS.postMultiPartForm( request, multiPart, progressListener, new MASCallback<MASResponse>() {
-
-                        @Override
-                        public void onSuccess(MASResponse result) {
-                            Log.d(TAG, "Upload of the capture photo succeeded");
-                            runOnUiThread( new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        mProgressBar.setVisibility( View.GONE );
-                                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
-                                        alertDialog.setTitle("SUCCESS");
-                                        alertDialog.setMessage("Captured Image was successfully Uploaded");
-                                        alertDialog.setPositiveButton("OK",
-                                                new DialogInterface.OnClickListener() {
-
-                                                    @Override
-                                                    public void onClick(DialogInterface arg0, int arg1) {
-
-
-                                                    }
-                                                });
-                                        alertDialog.show();
-                                    }
-                                    catch (Exception e) {
-                                        Log.d(TAG,e.getMessage().toString());
-                                        e.printStackTrace();
-                                    }
-
-                                }
-                            } );
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            Log.d(TAG, "Upload of the capture photo failed");
-                            runOnUiThread( new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        mProgressBar.setVisibility( View.GONE );
-                                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
-                                        alertDialog.setTitle("ALERT");
-                                        alertDialog.setMessage("Captured Image failed to Uploaded");
-                                        alertDialog.setPositiveButton("OK",
-                                                new DialogInterface.OnClickListener() {
-
-                                                    @Override
-                                                    public void onClick(DialogInterface arg0, int arg1) {
-
-
-                                                    }
-                                                });
-                                        alertDialog.show();
-                                    }
-                                    catch (Exception e) {
-                                        Log.d("STATE",e.getMessage().toString());
-                                        e.printStackTrace();
-                                    }
-
-                                }
-                            } );
-                        }
-                    } );
-                } catch ( com.ca.mas.foundation.MASException e) {
-                    Log.d(TAG, "Upload of the capture photo failed with error: " + e.getMessage());
-                }
-
-
-                //
-
-            }
-
-        }
-
         //
         // Got the QR Code, perform the remote login request.
         //
-
-        if (requestCode == REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                // The session was successfully unlocked
-                MASUser.getCurrentUser().unlockSession(getUnlockCallback(this));
-                Log.d(TAG, "The User Session was successfully unlocked");
-            } else if (resultCode == RESULT_CANCELED) {
-                // The Android lockscreen Activity was cancelled
-                Log.d(TAG, "The User Unlock process was cancelled");
-                refreshDialogStatus();
-            }
-        }
-
-
         IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (scanResult != null) {
             String r = scanResult.getContents();
@@ -748,11 +346,8 @@ public class MainActivity extends AppCompatActivity {
                                     Log.d(TAG,e.getMessage().toString());
                                     e.printStackTrace();
                                 }
-
                             }
                         } );
-
-
                     }
                     @Override
                     public void onError(Throwable e) {
@@ -770,8 +365,6 @@ public class MainActivity extends AppCompatActivity {
 
                                                 @Override
                                                 public void onClick(DialogInterface arg0, int arg1) {
-
-
                                                 }
                                             });
                                     alertDialog.show();
@@ -780,11 +373,8 @@ public class MainActivity extends AppCompatActivity {
                                     Log.d(TAG,e.getMessage().toString());
                                     e.printStackTrace();
                                 }
-
                             }
                         } );
-
-
                     }
                 });
             }
@@ -800,7 +390,6 @@ public class MainActivity extends AppCompatActivity {
             if (currentUser.isAuthenticated()) {
                 Log.d( TAG, "MAS User Session is currently authenticated" );
 
-
                 //
                 // Was Social Media Login used by the user
                 //
@@ -809,16 +398,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         try {
-
-                            // mJsonResponseTextView.setText( "" );
-                            // mUnProtectedAPIButton.setEnabled( true );
-                            // mProtectedAPIButton.setEnabled( true );
-                            // mSessionTransferButton.setEnabled( true );
-                            //mBleButton.setEnabled( true );
                             mLogoutButton.setEnabled( true );
-                            // mFileUpLoadButton.setEnabled( true );
-                            //  mScreenLockSwitch.setChecked( false );
-
                             if (currentUser.getUserName().toString().contains( "google-" )) {
                                 String googleId = currentUser.getUserName().toString().substring( currentUser.getUserName().toString().indexOf( "-" ) + 1 );
                                 String googleUserId = googleId.substring( googleId.indexOf( "-" ) + 1 );
@@ -830,15 +410,7 @@ public class MainActivity extends AppCompatActivity {
                                 setTitle( "Authenticated [" + currentUser.getUserName().toString() + "]" );
                             }
                             mLogoutButton.setVisibility( View.VISIBLE );
-                            // mSessionTransferButton.setVisibility( View.VISIBLE );
-                            //mBleButton.setVisibility( View.VISIBLE );
-
-                            // Change the wording of the Protected APi button
-
                             mLoginButton.setVisibility( View.INVISIBLE);
-                            // mScreenLockSwitch.setVisibility( View.VISIBLE );
-                            //   mFileUpLoadButton.setVisibility( View.VISIBLE );
-
                         } catch (Exception e) {
                             Log.d( TAG, e.getMessage().toString() );
                             e.printStackTrace();
@@ -853,16 +425,9 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread( new Runnable() {
                     @Override
                     public void run() {
-                        // mJsonResponseTextView.setText( "\n\nUser Session Has been Locked. \n\n To Unlock please disable the Session Lock below" );
-                        // mScreenLockSwitch.setChecked( true );
                         mLogoutButton.setEnabled( false );
                         mLoginButton.setVisibility( View.INVISIBLE );
-                        // mSessionTransferButton.setEnabled( false );
-                        //mBleButton.setEnabled( false );
-                        // mUnProtectedAPIButton.setEnabled( false );
-                        //  mProtectedAPIButton.setEnabled( false );
                         mUserAuthenticatedStatus.setText( "User Session is Locked!" );
-                        //mFileUpLoadButton.setEnabled( false );
                     }
                 } );
 
@@ -876,14 +441,9 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     mLogoutButton.setVisibility( View.INVISIBLE );
-                    // mSessionTransferButton.setVisibility( View.INVISIBLE );
                     mProgressBar.setVisibility( View.INVISIBLE);
-                    //  mBleButton.setVisibility( View.INVISIBLE );
-                    // mScreenLockSwitch.setVisibility( View.INVISIBLE );
                     mLoginButton.setVisibility( View.VISIBLE);
-                    //  mFileUpLoadButton.setVisibility (View.INVISIBLE);
                     mLoginButton.setEnabled( true );
-                    //  mJsonResponseTextView.setText( "" );
                     setTitle( "Please Authenticate" );
                     mUserAuthenticatedStatus.setText( "Not Authenticated" );
                 }
@@ -891,124 +451,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         }
-    }
-
-    private static List<String> parseJsonResponseData(JSONObject json) throws JSONException {
-        List<String> objects = new ArrayList<>();
-
-        String lTimeStamp = (String) json.get( "TimeStamp" );
-
-        objects.add( "\nGateway TimeStamp: " + lTimeStamp + "\n" );
-
-        try {
-            if (json.has( "products" )) {
-                JSONArray items = json.getJSONArray( "products" );
-                for (int i = 0; i < items.length(); i++) {
-                    JSONObject item = (JSONObject) items.get( i );
-                    Integer id = (Integer) item.get( "id" );
-                    String name = (String) item.get( "name" );
-                    String price = (String) item.get( "price" );
-                    objects.add( id + ": " + name + ", $" + price );
-                }
-            }
-
-
-        } catch (ClassCastException e) {
-            throw (JSONException) new JSONException("Response JSON was not in the expected format").initCause(e);
-        }
-
-        return objects;
-    }
-
-
-    private void selectImage() {
-        final CharSequence[] options = { "Take Photo", "Choose from Gallery","Cancel" };
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-        builder.setTitle("Add Photo!");
-        builder.setItems(options, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
-                if (options[item].equals("Take Photo"))
-                {
-
-                    Intent intent = new Intent( MediaStore.ACTION_IMAGE_CAPTURE);
-                    if (intent.resolveActivity(getPackageManager()) != null) {
-
-
-                        // Create the File where the photo should go
-                        File photoFile = null;
-                        try {
-                            photoFile = createImageFile();
-
-                        } catch (IOException ex) {
-                            // Error occurred while creating the File
-                        }
-
-
-                        // Continue only if the File was successfully created
-                        if (photoFile != null) {
-                            Uri photoURI = FileProvider.getUriForFile( MainActivity.this,
-                                    "com.brcm.apim.magtraining",
-                                    photoFile );
-                            intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                            startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
-                        }
-
-
-
-                    }
-
-
-                }
-                else if (options[item].equals("Choose from Gallery"))
-                {
-
-                    Intent intent = new  Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
-                }
-                else if (options[item].equals("Cancel")) {
-                    dialog.dismiss();
-                }
-            }
-        });
-        builder.show();
-    }
-
-
-    private byte[] getFileBytes(String pFileName) throws IOException {
-
-        File lFile = new File(pFileName);
-        int lFileSize = (int) lFile.length();
-        byte[] lBytes = new byte[lFileSize];
-
-        try {
-            BufferedInputStream buf = new BufferedInputStream( new FileInputStream( lFile ) );
-            buf.read(lBytes, 0, lBytes.length);
-            buf.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return lBytes;
-
-
-    }
-
-    private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getExternalFilesDir( Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
-
-        // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = image.getAbsolutePath();
-        return image;
     }
 
     //
@@ -1069,7 +511,6 @@ public class MainActivity extends AppCompatActivity {
                 criticalPermission = permissions[currGrant];
                 break;
             }
-
         }
 
         if (criticalPermission != null) {
@@ -1104,7 +545,6 @@ public class MainActivity extends AppCompatActivity {
 
             });
         }
-
     }
 
     //
@@ -1122,8 +562,6 @@ public class MainActivity extends AppCompatActivity {
     public void onResume()
     {
         super.onResume();
-
-
         //
         // To cater for in App Session Locking after a timeout period start the ActivityTimer
         //
@@ -1204,73 +642,9 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
-
-    private void registerBroadcastReceiver() {
-
-        final IntentFilter theFilter = new IntentFilter();
-        /** System Defined Broadcast */
-        theFilter.addAction(Intent.ACTION_SCREEN_ON);
-        theFilter.addAction(Intent.ACTION_SCREEN_OFF);
-        theFilter.addAction(Intent.ACTION_USER_PRESENT);
-
-        BroadcastReceiver screenOnOffReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                String strAction = intent.getAction();
-
-                KeyguardManager myKM = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
-                if(strAction.equals(Intent.ACTION_USER_PRESENT) || strAction.equals(Intent.ACTION_SCREEN_OFF) || strAction.equals(Intent.ACTION_SCREEN_ON)  )
-                    if( myKM.inKeyguardRestrictedInputMode())
-                    {
-                        Log.d(TAG,"Screen off LOCKED");
-                        MASUser currentUser = MASUser.getCurrentUser();
-                        if (currentUser != null && !currentUser.isSessionLocked()) {
-                            currentUser.lockSession( null );
-                            if (currentUser.isSessionLocked())
-                            {
-                                Log.d(TAG,"User Session is locked");
-                            }
-
-                            stopInActivityTimer();
-                            refreshDialogStatus();
-                        }
-                    } else
-                    {
-                        refreshDialogStatus();
-                    }
-
-            }
-        };
-
-        getApplicationContext().registerReceiver(screenOnOffReceiver, theFilter);
-    }
     //
     // End of the App Background Handling and screen locking code
     //
-
-    private String loadJSONFromAsset(Context context) {
-        String json = null;
-        try {
-            InputStream is = context.getAssets().open("msso_config.json");
-
-            int size = is.available();
-
-            byte[] buffer = new byte[size];
-
-            is.read(buffer);
-
-            is.close();
-
-            json = new String(buffer, "UTF-8");
-
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-        return json;
-
-    }
 
 }
 
