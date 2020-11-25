@@ -1,4 +1,4 @@
-#Wed Nov 25 12:53:58 IST 2020
+#Wed Nov 25 13:02:14 IST 2020
 base.0=/Users/abhisheknaidu/Documents/CAA_SampkeApps/SampleApp-MAGTraining-InterAppSSO/MAGTrainingInterAppSSO/build/intermediates/dex/debug/mergeDexDebug/out/classes.dex
 path.0=classes.dex
 renamed.0=classes.dex

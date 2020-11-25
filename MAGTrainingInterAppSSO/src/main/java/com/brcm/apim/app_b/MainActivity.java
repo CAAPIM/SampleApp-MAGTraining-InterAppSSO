@@ -629,17 +629,12 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "User Session is locked due to deliberate locking");
                 stopInActivityTimer();
             }
-
         } else {
-
-
             //
             // Reset the timer here by stopping and starting it again, to reflect in-app interaction
             //
             stopInActivityTimer();
             startInActivityTimer();
-
-
         }
     }
     //
