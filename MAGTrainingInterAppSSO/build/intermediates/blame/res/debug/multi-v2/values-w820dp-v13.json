@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "/Users/abhisheknaidu/Documents/CAA_SampkeApps/SampleApp-MAGTraining-InterAppSSO/MAGTrainingInterAppSSO/build/intermediates/incremental/mergeDebugResources/merged.dir/values-w820dp-v13/values-w820dp-v13.xml",
+            "outputFile": "/Users/abhisheknaidu/Desktop/Android_SampleApps/SampleApp-MAGTraining-InterAppSSO/MAGTrainingInterAppSSO/build/intermediates/incremental/mergeDebugResources/merged.dir/values-w820dp-v13/values-w820dp-v13.xml",
             "map": [
                 {
-                    "source": "/Users/abhisheknaidu/.gradle/caches/transforms-2/files-2.1/39fe95dde901617777e43e705a3e795d/jetified-masui-release/res/values-w820dp-v13/values-w820dp-v13.xml",
+                    "source": "/Users/abhisheknaidu/.gradle/caches/transforms-2/files-2.1/d3edd1fb0b93786c1b1256daf6762e99/jetified-masui-release/res/values-w820dp-v13/values-w820dp-v13.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

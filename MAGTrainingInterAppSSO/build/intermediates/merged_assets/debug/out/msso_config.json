@@ -1,108 +1,47 @@
 {
   "server": {
-    "hostname": "maglab94.brcmlabs.com",
+    "hostname": "mobile-staging-iosautomation.lvn.broadcom.net",
     "port": 8443,
     "prefix": "",
     "server_certs": [
       [
         "-----BEGIN CERTIFICATE-----",
-        "MIIDdTCCAl2gAwIBAgILBAAAAAABFUtaw5QwDQYJKoZIhvcNAQEFBQAwVzELMAkG",
-        "A1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExEDAOBgNVBAsTB1Jv",
-        "b3QgQ0ExGzAZBgNVBAMTEkdsb2JhbFNpZ24gUm9vdCBDQTAeFw05ODA5MDExMjAw",
-        "MDBaFw0yODAxMjgxMjAwMDBaMFcxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9i",
-        "YWxTaWduIG52LXNhMRAwDgYDVQQLEwdSb290IENBMRswGQYDVQQDExJHbG9iYWxT",
-        "aWduIFJvb3QgQ0EwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDaDuaZ",
-        "jc6j40+Kfvvxi4Mla+pIH/EqsLmVEQS98GPR4mdmzxzdzxtIK+6NiY6arymAZavp",
-        "xy0Sy6scTHAHoT0KMM0VjU/43dSMUBUc71DuxC73/OlS8pF94G3VNTCOXkNz8kHp",
-        "1Wrjsok6Vjk4bwY8iGlbKk3Fp1S4bInMm/k8yuX9ifUSPJJ4ltbcdG6TRGHRjcdG",
-        "snUOhugZitVtbNV4FpWi6cgKOOvyJBNPc1STE4U6G7weNLWLBYy5d4ux2x8gkasJ",
-        "U26Qzns3dLlwR5EiUWMWea6xrkEmCMgZK9FGqkjWZCrXgzT/LCrBbBlDSgeF59N8",
-        "9iFo7+ryUp9/k5DPAgMBAAGjQjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8E",
-        "BTADAQH/MB0GA1UdDgQWBBRge2YaRQ2XyolQL30EzTSo//z9SzANBgkqhkiG9w0B",
-        "AQUFAAOCAQEA1nPnfE920I2/7LqivjTFKDK1fPxsnCwrvQmeU79rXqoRSLblCKOz",
-        "yj1hTdNGCbM+w6DjY1Ub8rrvrTnhQ7k4o+YviiY776BQVvnGCv04zcQLcFGUl5gE",
-        "38NflNUVyRRBnMRddWQVDf9VMOyGj/8N7yy5Y0b2qvzfvGn9LhJIZJrglfCm7ymP",
-        "AbEVtQwdpf5pLGkkeB6zpxxxYu7KyJesF12KwvhHhm4qxFYxldBniYUr+WymXUad",
-        "DKqC5JlR3XC321Y9YeRq4VzW9v493kHMB65jUr9TU/Qr6cf9tveCX4XSQRjbgbME",
-        "HMUfpIBvFSDJ3gyICh3WZlXi/EjJKSZp4A==",
-        "-----END CERTIFICATE-----"
-      ],
-
-      [
-        "-----BEGIN CERTIFICATE-----",
-        "MIIETTCCAzWgAwIBAgILBAAAAAABRE7wNjEwDQYJKoZIhvcNAQELBQAwVzELMAkG",
-        "A1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExEDAOBgNVBAsTB1Jv",
-        "b3QgQ0ExGzAZBgNVBAMTEkdsb2JhbFNpZ24gUm9vdCBDQTAeFw0xNDAyMjAxMDAw",
-        "MDBaFw0yNDAyMjAxMDAwMDBaMEwxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9i",
-        "YWxTaWduIG52LXNhMSIwIAYDVQQDExlBbHBoYVNTTCBDQSAtIFNIQTI1NiAtIEcy",
-        "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2gHs5OxzYPt+j2q3xhfj",
-        "kmQy1KwA2aIPue3ua4qGypJn2XTXXUcCPI9A1p5tFM3D2ik5pw8FCmiiZhoexLKL",
-        "dljlq10dj0CzOYvvHoN9ItDjqQAu7FPPYhmFRChMwCfLew7sEGQAEKQFzKByvkFs",
-        "MVtI5LHsuSPrVU3QfWJKpbSlpFmFxSWRpv6mCZ8GEG2PgQxkQF5zAJrgLmWYVBAA",
-        "cJjI4e00X9icxw3A1iNZRfz+VXqG7pRgIvGu0eZVRvaZxRsIdF+ssGSEj4k4HKGn",
-        "kCFPAm694GFn1PhChw8K98kEbSqpL+9Cpd/do1PbmB6B+Zpye1reTz5/olig4het",
-        "ZwIDAQABo4IBIzCCAR8wDgYDVR0PAQH/BAQDAgEGMBIGA1UdEwEB/wQIMAYBAf8C",
-        "AQAwHQYDVR0OBBYEFPXN1TwIUPlqTzq3l9pWg+Zp0mj3MEUGA1UdIAQ+MDwwOgYE",
-        "VR0gADAyMDAGCCsGAQUFBwIBFiRodHRwczovL3d3dy5hbHBoYXNzbC5jb20vcmVw",
-        "b3NpdG9yeS8wMwYDVR0fBCwwKjAooCagJIYiaHR0cDovL2NybC5nbG9iYWxzaWdu",
-        "Lm5ldC9yb290LmNybDA9BggrBgEFBQcBAQQxMC8wLQYIKwYBBQUHMAGGIWh0dHA6",
-        "Ly9vY3NwLmdsb2JhbHNpZ24uY29tL3Jvb3RyMTAfBgNVHSMEGDAWgBRge2YaRQ2X",
-        "yolQL30EzTSo//z9SzANBgkqhkiG9w0BAQsFAAOCAQEAYEBoFkfnFo3bXKFWKsv0",
-        "XJuwHqJL9csCP/gLofKnQtS3TOvjZoDzJUN4LhsXVgdSGMvRqOzm+3M+pGKMgLTS",
-        "xRJzo9P6Aji+Yz2EuJnB8br3n8NA0VgYU8Fi3a8YQn80TsVD1XGwMADH45CuP1eG",
-        "l87qDBKOInDjZqdUfy4oy9RU0LMeYmcI+Sfhy+NmuCQbiWqJRGXy2UzSWByMTsCV",
-        "odTvZy84IOgu/5ZR8LrYPZJwR2UcnnNytGAMXOLRc3bgr07i5TelRS+KIz6HxzDm",
-        "MTh89N1SyvNTBCVXVmaU6Avu5gMUTu79bZRknl7OedSyps9AsUSoPocZXun4IRZZ",
-        "Uw==",
-        "-----END CERTIFICATE-----"
-      ],
-      [
-        "-----BEGIN CERTIFICATE-----",
-        "MIIF5TCCBM2gAwIBAgIMZqI3q7WFnhiEUZWbMA0GCSqGSIb3DQEBCwUAMEwxCzAJBgNVBAYTAkJF",
-        "MRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSIwIAYDVQQDExlBbHBoYVNTTCBDQSAtIFNIQTI1",
-        "NiAtIEcyMB4XDTE5MTEyMDE1NTcyOVoXDTIwMTEyMDE1NTcyOVowPDEhMB8GA1UECxMYRG9tYWlu",
-        "IENvbnRyb2wgVmFsaWRhdGVkMRcwFQYDVQQDDA4qLmJyY21sYWJzLmNvbTCCASIwDQYJKoZIhvcN",
-        "AQEBBQADggEPADCCAQoCggEBAL40c0ZG99xFekqDWsQNWXtDUYrnml6EimpQ1XOdvcLlroDEvOSd",
-        "KjencWBFvIbWiGNdm65A6lR1JxjeCwoJ1ePnhszmVzCsJw3w+UaF/7JugvS8X/TwFg/deXDQkTVB",
-        "L4gdFNVigv5oOav3nMuNO2FZmi87uML6x6erHxFDsYK8UsLNQ3oNA9tB2eRur7O/WSMQqb7lAlDj",
-        "ThDKkSTc7ZGXnjDW7JzGA/bdQpZbljRI4lJCa03gacRkz5nCtqivsyp+EsEvIoKKBznQXKUZNya/",
-        "0uhdYEGjSF4PUkI4B0/nE4vJsc15672gd8NDrI5Gin1HJnSvSHuToxN1tSONEKcCAwEAAaOCAtUw",
-        "ggLRMA4GA1UdDwEB/wQEAwIFoDCBiQYIKwYBBQUHAQEEfTB7MEIGCCsGAQUFBzAChjZodHRwOi8v",
-        "c2VjdXJlMi5hbHBoYXNzbC5jb20vY2FjZXJ0L2dzYWxwaGFzaGEyZzJyMS5jcnQwNQYIKwYBBQUH",
-        "MAGGKWh0dHA6Ly9vY3NwMi5nbG9iYWxzaWduLmNvbS9nc2FscGhhc2hhMmcyMFcGA1UdIARQME4w",
-        "QgYKKwYBBAGgMgEKCjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5nbG9iYWxzaWduLmNvbS9y",
-        "ZXBvc2l0b3J5LzAIBgZngQwBAgEwCQYDVR0TBAIwADA+BgNVHR8ENzA1MDOgMaAvhi1odHRwOi8v",
-        "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",
+        "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",
+        "yGAqNFYt9VoPIw==",
         "-----END CERTIFICATE-----"
       ]
     ]
   },
   "oauth": {
     "client": {
-      "organization": "Broadcom",
+      "organization": "CA Technologies",
       "description": "What is the app used for?",
-      "client_name": "Prague Training App A",
+      "client_name": "iOSAutomation",
       "client_type": "confidential",
       "registered_by": "admin",
       "client_custom": {},
       "client_ids": [
         {
-          "client_id": "98f10fea-08e1-4948-a63c-0920a92104ab",
+          "client_id": "1f7f2adc-ecf2-4dd7-b9cd-98746c86a7e4",
           "client_secret": "",
-          "scope": "openid msso phone profile address email user_role msso_client_register msso_device_metadata msso_register",
-          "redirect_uri": "camsso://com.ca.prague.appa",
+          "scope": "openid msso phone profile address email msso_client_register msso_register mas_messaging mas_storage mas_identity mas_identity_retrieve_users mas_identity_create_users mas_identity_update_users mas_identity_delete_users mas_identity_retrieve_groups mas_identity_create_groups mas_identity_update_groups mas_identity_delete_groups",
+          "redirect_uri": "masunit://",
           "environment": "ALL",
           "status": "ENABLED",
           "registered_by": "admin",
@@ -113,19 +52,19 @@
               "request": {},
               "oauth_client": true,
               "response": {
-                "client_id": "98f10fea-08e1-4948-a63c-0920a92104ab",
-                "client_secret": "98f10fea-08e1-4948-a63c-0920a92104ab",
+                "client_id": "1f7f2adc-ecf2-4dd7-b9cd-98746c86a7e4",
+                "client_secret": "1f7f2adc-ecf2-4dd7-b9cd-98746c86a7e4",
                 "client_secret_expires_at": "0",
-                "client_id_issued_at": 1571221211,
+                "client_id_issued_at": 1548107478,
                 "registration_access_token": "",
                 "registration_client_uri": "",
                 "token_endpoint_auth_method": "client_secret_basic",
                 "token_endpoint_auth_signing_alg": "",
                 "application_type": "",
                 "redirect_uris": [
-                  "oob"
+                  "masunit://"
                 ],
-                "client_name": "Prague Training App A",
+                "client_name": "iOSAutomation",
                 "subject_type": "pairwise",
                 "sector_identifier_uri": "",
                 "contacts": [],
@@ -134,10 +73,10 @@
                 "id_token_signed_response_alg": "HS256",
                 "userinfo_signed_response_alg": "",
                 "environment": "ALL",
-                "organization": "Broadcom",
+                "organization": "CA Technologies",
                 "master": true,
                 "description": "What is the app used for?",
-                "scope": "oob",
+                "scope": "openid msso phone profile address email msso_client_register msso_register mas_messaging mas_storage mas_identity mas_identity_retrieve_users mas_identity_create_users mas_identity_update_users mas_identity_delete_users mas_identity_retrieve_groups mas_identity_create_groups mas_identity_update_groups mas_identity_delete_groups",
                 "jwks": "",
                 "jwks_uri": ""
               }
@@ -156,6 +95,10 @@
     "oauth_protected_endpoints": {
       "userinfo_endpoint_path": "/openid/connect/v1/userinfo"
     }
+  },
+  "mas": {
+    "scim-path": "/SCIM/MAS/v2",
+    "mas-storage-path": "/MASS/v1/Client"
   },
   "mag": {
     "system_endpoints": {
@@ -179,10 +122,7 @@
       "enable_public_key_pinning": false,
       "trusted_public_pki": false,
       "trusted_cert_pinned_public_key_hashes": [],
-      "client_cert_rsa_keybits": 1024,
-      "storage":{
-        "class":"com.ca.mas.core.datasource.MASSecureStorageDataSource"
-      }
+      "client_cert_rsa_keybits": 1024
     },
     "ble": {
       "msso_ble_service_uuid": "980c2f36-bde3-11e4-8dfc-aa07a5b093db",
@@ -194,5 +134,4 @@
     "oauth_demo_protected_api_endpoint_path": "/oauth/v2/protectedapi/foo",
     "mag_demo_products_endpoint_path": "/protected/resource/products"
   }
-
 }

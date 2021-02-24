@@ -190,7 +190,8 @@ public class MainActivity extends AppCompatActivity {
         // Start the MAS SDK
         //
 
-        MAS.start(this);
+        MAS.start(this, true);
+
 
         int myMasState = MAS.getState( this );
 
@@ -227,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Log.d( TAG, "Login Button has been clicked" );
 
-                MASUser.login( new MASCallback<MASUser>() {
+                MASUser.login("spock","StRonG5^)".toCharArray(), new MASCallback<MASUser>() {
                     @Override
                     public void onSuccess(MASUser masUser) {
                         Log.d( TAG, "User was successfully authenticated" );
@@ -236,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(Throwable throwable) {
-                        Log.d( TAG, "User was failed to authenticate successfully" );
+                        Log.d( TAG, "User was failed to authenticate" );
                     }
                 } );
 
