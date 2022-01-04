@@ -23,10 +23,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 
+/*This class is used to test SSO Login */
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class SSOLoginTest {
 
+
+    /* This method is called before the test, it will invoke/enable the runtime permissions, This also initiates Idling resource
+  object */
     @Before
     public void before() {
         IdlingRegistry.getInstance().register(CountingIdlingResourceSingleton.countingIdlingResource);
@@ -44,10 +48,12 @@ public class SSOLoginTest {
         }
     }
 
+    /* This will launch the MainActivity */
     @Rule
     public ActivityScenarioRule<MainActivity> mActivityRule =
             new ActivityScenarioRule<>(MainActivity.class);
 
+    /*This test is used to test the negative use-case of user-Authentication*/
     @Test
     public void test_01ssoLoginTestWrongCredentials() {
         onView(withId(R.id.loginButtonWrongCredentials)).perform(click());
@@ -56,6 +62,7 @@ public class SSOLoginTest {
                 .check(matches(withText("Not Authenticated")));
     }
 
+    /*This test is used to test the positive use-case of user-Authentication*/
     @Test
     public void test_02ssoLoginTest() {
         onView(withId(R.id.loginButton)).perform(click());
@@ -63,6 +70,7 @@ public class SSOLoginTest {
         onView(withId(R.id.logoutButton)).check(matches(isDisplayed()));
     }
 
+    /* This test is used to test the logout functionality */
     @Test
     public void test_03ssoLogoutTest() {
         onView(withId(R.id.logoutButton)).perform(click());

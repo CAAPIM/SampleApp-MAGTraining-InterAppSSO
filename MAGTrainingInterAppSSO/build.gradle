@@ -40,15 +40,11 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
 
     // Required for the QRCode Validation/Interaction
-
     implementation 'com.google.zxing:android-integration:3.3.0'
 
     // MAS Specific Libraries
-//    implementation 'com.ca.mas.core:mas-foundation-release@aar'
     implementation 'com.ca.apim:mas-foundation:2.2.0'
-//    implementation 'com.ca.mas.ui:masui-release@aar'
     implementation 'com.ca.apim:masui:2.2.0'
-//    implementation 'com.ca.mas.core.storage:mas-storage-release@aar'
     implementation 'com.ca.apim:mas-storage:2.2.0'
 
     // Google Support libraries
