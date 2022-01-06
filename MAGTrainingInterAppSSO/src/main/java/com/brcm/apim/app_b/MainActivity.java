@@ -85,12 +85,14 @@ import androidx.core.content.FileProvider;
 public class MainActivity extends AppCompatActivity {
 
 
-    private String mEmulatorLocation=null;
-    private Button mLoginButton=null;
-    private Button mLogoutButton=null;
-    private TextView mUserAuthenticatedStatus=null;
-    private ProgressBar mProgressBar=null;
-    private ProgressBar mFileUploadProgressBar=null;
+    private String mEmulatorLocation = null;
+    private Button loginButtonWrongCredentials = null;
+    private Button mLoginButton = null;
+    private Button mLogoutButton = null;
+
+    private TextView mUserAuthenticatedStatus = null;
+    private ProgressBar mProgressBar = null;
+
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -102,17 +104,16 @@ public class MainActivity extends AppCompatActivity {
     private final long MAX_ACTIVITY_TRANSITION_TIME_MS = 600000;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate( savedInstanceState );
-        setContentView( R.layout.activity_main );
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
 
         //
         // Prevents screenshotting of content in Recents
         //
-        getWindow().setFlags( WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
 
 
         setTitle("Please login.....");
@@ -121,15 +122,15 @@ public class MainActivity extends AppCompatActivity {
         //
         // Initialise the various Dialog Element references
         //
-
+        loginButtonWrongCredentials = findViewById(R.id.loginButtonWrongCredentials);
         mLoginButton = findViewById(R.id.loginButton);
-        mLogoutButton = findViewById( R.id.logoutButton );
-        mProgressBar = findViewById( R.id.progressBar );
-        mFileUploadProgressBar = findViewById( R.id.hProgressBar );
-        mUserAuthenticatedStatus = findViewById( R.id.userStatusTextView );
+        mLogoutButton = findViewById(R.id.logoutButton);
+        mProgressBar = findViewById(R.id.progressBar);
 
-        mProgressBar.setVisibility( View.INVISIBLE );
-        mFileUploadProgressBar.setVisibility( View.GONE );
+        mUserAuthenticatedStatus = findViewById(R.id.userStatusTextView);
+
+        mProgressBar.setVisibility(View.INVISIBLE);
+
         //
         // We need to ensure the location service is available on the emulator and real device
         //
@@ -142,33 +143,33 @@ public class MainActivity extends AppCompatActivity {
         // Better solution would be to display a dialog and suggesting to
         // go to the settings
         if (!enabled) {
-            Intent intent = new Intent( Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
             startActivity(intent);
         }
 
         try {
 
-            TelephonyManager tm = (TelephonyManager)getSystemService( Context.TELEPHONY_SERVICE);
+            TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
             String networkOperator = tm.getNetworkOperatorName();
             if ("Android".equals(networkOperator)) {
                 //
                 // Emulator
                 //
                 LocationManager locationManager = (LocationManager) getApplicationContext()
-                        .getSystemService( Context.LOCATION_SERVICE );
+                        .getSystemService(Context.LOCATION_SERVICE);
                 Location lastKnownLocation = locationManager
-                        .getLastKnownLocation( LocationManager.GPS_PROVIDER );
+                        .getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
-                if (lastKnownLocation != null){
+                if (lastKnownLocation != null) {
                     mEmulatorLocation = String.format("%f,%f", lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
                     //                   mEmulatorLocation = String.format("%f,%f",47.6773745,-122.3250831);
 
-                    Log.d(TAG,"Last Known Location: [" + mEmulatorLocation + "]");
+                    Log.d(TAG, "Last Known Location: [" + mEmulatorLocation + "]");
                 }
 
-                Log.d(TAG,"Emulator is being used: [" + mEmulatorLocation + "]");
+                Log.d(TAG, "Emulator is being used: [" + mEmulatorLocation + "]");
             } else
-                Log.d(TAG,"Real device Location is being used: [" + mEmulatorLocation + "]");
+                Log.d(TAG, "Real device Location is being used: [" + mEmulatorLocation + "]");
 
         } catch (SecurityException e) {
             e.printStackTrace();
@@ -193,25 +194,25 @@ public class MainActivity extends AppCompatActivity {
         MAS.start(this, true);
 
 
-        int myMasState = MAS.getState( this );
+        int myMasState = MAS.getState(this);
 
-        if ( myMasState == MASConstants.MAS_STATE_STARTED )
-            Log.d(TAG,"MAS SDK Successfully started");
+        if (myMasState == MASConstants.MAS_STATE_STARTED)
+            Log.d(TAG, "MAS SDK Successfully started");
 
         //
         // Checking for connectivity
         //
-        MAS.gatewayIsReachable( new MASCallback<Boolean>() {
+        MAS.gatewayIsReachable(new MASCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean aBoolean) {
-                Log.d(TAG,"MAS Server is reachable!");
+                Log.d(TAG, "MAS Server is reachable!");
             }
 
             @Override
             public void onError(Throwable throwable) {
 
             }
-        } );
+        });
 
 
         //
@@ -219,27 +220,85 @@ public class MainActivity extends AppCompatActivity {
         //
         refreshDialogStatus();
 
-        //
-        // Defined the Login Buttton listener
-        //
-        mLoginButton.setOnClickListener( new View.OnClickListener() {
+
+        loginButtonWrongCredentials.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Log.d( TAG, "Login Button has been clicked" );
-
-                MASUser.login("spock","StRonG5^)".toCharArray(), new MASCallback<MASUser>() {
+                if (BuildConfig.DEBUG) {
+                    CountingIdlingResourceSingleton.increment();
+                }
+                mProgressBar.setVisibility(View.VISIBLE);
+                Log.d(TAG, "Login Button has been clicked");
+                // Passing wrong user-name
+                MASUser.login("spock1", "StRonG5^)".toCharArray(), new MASCallback<MASUser>() {
                     @Override
                     public void onSuccess(MASUser masUser) {
-                        Log.d( TAG, "User was successfully authenticated" );
+                        Log.d(TAG, "User was successfully authenticated");
+                        mProgressBar.setVisibility(View.INVISIBLE);
+                        if (BuildConfig.DEBUG) {
+                            CountingIdlingResourceSingleton.decrement();
+                        }
                         refreshDialogStatus();
                     }
 
                     @Override
                     public void onError(Throwable throwable) {
-                        Log.d( TAG, "User was failed to authenticate" );
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mProgressBar.setVisibility(View.INVISIBLE);
+                                if (BuildConfig.DEBUG) {
+                                    CountingIdlingResourceSingleton.decrement();
+                                }
+                                Toast.makeText(MainActivity.this, "User was failed to authenticate", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                        Log.d(TAG, "User was failed to authenticate");
                     }
-                } );
+                });
+
+
+            }
+        });
+
+        //
+        // Defined the Login Buttton listener
+        //
+        mLoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (BuildConfig.DEBUG) {
+                    CountingIdlingResourceSingleton.increment();
+                }
+                mProgressBar.setVisibility(View.VISIBLE);
+                Log.d(TAG, "Login Button has been clicked");
+
+                MASUser.login("spock", "StRonG5^)".toCharArray(), new MASCallback<MASUser>() {
+                    @Override
+                    public void onSuccess(MASUser masUser) {
+                        Log.d(TAG, "User was successfully authenticated");
+                        mProgressBar.setVisibility(View.INVISIBLE);
+                        refreshDialogStatus();
+                        if (BuildConfig.DEBUG) {
+                            CountingIdlingResourceSingleton.decrement();
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable throwable) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mProgressBar.setVisibility(View.INVISIBLE);
+                                if (BuildConfig.DEBUG) {
+                                    CountingIdlingResourceSingleton.decrement();
+                                }
+                                Toast.makeText(MainActivity.this, "User was failed to authenticate", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                        Log.d(TAG, "User was failed to authenticate");
+                    }
+                });
 
 
             }
@@ -249,30 +308,39 @@ public class MainActivity extends AppCompatActivity {
         // Defined the Logout Buttton listener
         //
 
-        mLogoutButton.setOnClickListener( new View.OnClickListener() {
+        mLogoutButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
-                Log.d( TAG, "Logout Button has been clicked" );
+                if (BuildConfig.DEBUG) {
+                    CountingIdlingResourceSingleton.increment();
+                }
+                Log.d(TAG, "Logout Button has been clicked");
 
                 if (MASUser.getCurrentUser() != null) {
 
                     final String lAuthenticatedUserName = MASUser.getCurrentUser().getUserName();
 
-                    MASUser.getCurrentUser().logout( false, new MASCallback<Void>() {
+                    MASUser.getCurrentUser().logout(false, new MASCallback<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            Log.d( TAG, "User " + lAuthenticatedUserName + " has been logged out" );
+                            Log.d(TAG, "User " + lAuthenticatedUserName + " has been logged out");
                             refreshDialogStatus();
+                            if (BuildConfig.DEBUG) {
+                                CountingIdlingResourceSingleton.decrement();
+                            }
                         }
 
                         @Override
                         public void onError(Throwable throwable) {
-
+                            if (BuildConfig.DEBUG) {
+                                CountingIdlingResourceSingleton.decrement();
+                            }
                         }
-                    } );
+                    });
                 }
             }
-        } );
+        });
     }
 
     private int REQUEST_CODE = 0x1000;
@@ -298,7 +366,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onError(Throwable e) {
-                Log.d( "State", e.toString() );
+                Log.d("State", e.toString());
             }
         };
     }
@@ -322,10 +390,10 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onSuccess(Void result) {
-                        Log.d( TAG, "QR login Succeeded" );
+                        Log.d(TAG, "QR login Succeeded");
 
 
-                        runOnUiThread( new Runnable() {
+                        runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 try {
@@ -342,19 +410,19 @@ public class MainActivity extends AppCompatActivity {
                                                 }
                                             });
                                     alertDialog.show();
-                                }
-                                catch (Exception e) {
-                                    Log.d(TAG,e.getMessage().toString());
+                                } catch (Exception e) {
+                                    Log.d(TAG, e.getMessage().toString());
                                     e.printStackTrace();
                                 }
                             }
-                        } );
+                        });
                     }
+
                     @Override
                     public void onError(Throwable e) {
-                        Log.d( TAG, "Failed QR login"+e.getMessage() );
+                        Log.d(TAG, "Failed QR login" + e.getMessage());
 
-                        runOnUiThread( new Runnable() {
+                        runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 try {
@@ -369,13 +437,12 @@ public class MainActivity extends AppCompatActivity {
                                                 }
                                             });
                                     alertDialog.show();
-                                }
-                                catch (Exception e) {
-                                    Log.d(TAG,e.getMessage().toString());
+                                } catch (Exception e) {
+                                    Log.d(TAG, e.getMessage().toString());
                                     e.printStackTrace();
                                 }
                             }
-                        } );
+                        });
                     }
                 });
             }
@@ -389,66 +456,68 @@ public class MainActivity extends AppCompatActivity {
 
         if (currentUser != null) {
             if (currentUser.isAuthenticated()) {
-                Log.d( TAG, "MAS User Session is currently authenticated" );
+                Log.d(TAG, "MAS User Session is currently authenticated");
 
                 //
                 // Was Social Media Login used by the user
                 //
 
-                runOnUiThread( new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         try {
-                            mLogoutButton.setEnabled( true );
-                            if (currentUser.getUserName().toString().contains( "google-" )) {
-                                String googleId = currentUser.getUserName().toString().substring( currentUser.getUserName().toString().indexOf( "-" ) + 1 );
-                                String googleUserId = googleId.substring( googleId.indexOf( "-" ) + 1 );
+                            mLogoutButton.setEnabled(true);
+                            if (currentUser.getUserName().toString().contains("google-")) {
+                                String googleId = currentUser.getUserName().toString().substring(currentUser.getUserName().toString().indexOf("-") + 1);
+                                String googleUserId = googleId.substring(googleId.indexOf("-") + 1);
 
-                                mUserAuthenticatedStatus.setText( "Authenticated User [" + googleUserId + "]" );
-                                setTitle( "Authenticated [" + googleUserId + "]" );
+                                mUserAuthenticatedStatus.setText("Authenticated User [" + googleUserId + "]");
+                                setTitle("Authenticated [" + googleUserId + "]");
                             } else {
-                                mUserAuthenticatedStatus.setText( "Authenticated User [" + currentUser.getUserName().toString() + "]" );
-                                setTitle( "Authenticated [" + currentUser.getUserName().toString() + "]" );
+                                mUserAuthenticatedStatus.setText("Authenticated User [" + currentUser.getUserName().toString() + "]");
+                                setTitle("Authenticated [" + currentUser.getUserName().toString() + "]");
                             }
-                            mLogoutButton.setVisibility( View.VISIBLE );
-                            mLoginButton.setVisibility( View.INVISIBLE);
+                            mLogoutButton.setVisibility(View.VISIBLE);
+                            mLoginButton.setVisibility(View.INVISIBLE);
+                            loginButtonWrongCredentials.setVisibility(View.INVISIBLE);
                         } catch (Exception e) {
-                            Log.d( TAG, e.getMessage().toString() );
+                            Log.d(TAG, e.getMessage().toString());
                             e.printStackTrace();
                         }
 
                     }
-                } );
+                });
 
             } else if (currentUser.isSessionLocked()) {
-                Log.d( TAG, "MAS User Session is currently locked" );
+                Log.d(TAG, "MAS User Session is currently locked");
 
-                runOnUiThread( new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mLogoutButton.setEnabled( false );
-                        mLoginButton.setVisibility( View.INVISIBLE );
-                        mUserAuthenticatedStatus.setText( "User Session is Locked!" );
+                        mLogoutButton.setEnabled(false);
+                        mLoginButton.setVisibility(View.INVISIBLE);
+                        loginButtonWrongCredentials.setVisibility(View.INVISIBLE);
+                        mUserAuthenticatedStatus.setText("User Session is Locked!");
                     }
-                } );
-
+                });
 
 
             }
         } else {    // An Authenticated User Session doesn't exist yet
-            Log.d( TAG, "MAS User Session is not Authenticated" );
+            Log.d(TAG, "MAS User Session is not Authenticated");
 
-            runOnUiThread( new Runnable() {
+            runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mLogoutButton.setVisibility( View.INVISIBLE );
-                    mProgressBar.setVisibility( View.INVISIBLE);
-                    mLoginButton.setVisibility( View.VISIBLE);
-                    mLoginButton.setEnabled( true );
-                    setTitle( "Please Authenticate" );
-                    mUserAuthenticatedStatus.setText( "Not Authenticated" );
+                    mLogoutButton.setVisibility(View.INVISIBLE);
+                    mProgressBar.setVisibility(View.INVISIBLE);
+                    mLoginButton.setVisibility(View.VISIBLE);
+                    loginButtonWrongCredentials.setVisibility(View.VISIBLE);
+                    mLoginButton.setEnabled(true);
+                    setTitle("Please Authenticate");
+                    mUserAuthenticatedStatus.setText("Not Authenticated");
                 }
-            } );
+            });
 
 
         }
@@ -457,29 +526,28 @@ public class MainActivity extends AppCompatActivity {
     //
     // Check the app permissions before startup of the App
     //
-    final int PERMISSION_ALL=1;
+    final int PERMISSION_ALL = 1;
 
     private void checkAppPermissions() {
 
         String[] registeredPermissions = null;
         ArrayList<String> requiredPermissions = new ArrayList<String>();
-        try
-        {
-            registeredPermissions= getApplicationContext().getPackageManager()
-                    .getPackageInfo( getApplicationContext().getPackageName(), PackageManager.GET_PERMISSIONS )
+        try {
+            registeredPermissions = getApplicationContext().getPackageManager()
+                    .getPackageInfo(getApplicationContext().getPackageName(), PackageManager.GET_PERMISSIONS)
                     .requestedPermissions;
             Log.d(TAG, "Got the manifest permissions");
         } catch (PackageManager.NameNotFoundException e) {
 
         }
 
-        boolean permissionsNecessary=false;
-        for (int permissionsCount=0; permissionsCount < registeredPermissions.length; permissionsCount++) {
+        boolean permissionsNecessary = false;
+        for (int permissionsCount = 0; permissionsCount < registeredPermissions.length; permissionsCount++) {
             if (ContextCompat.checkSelfPermission(this, registeredPermissions[permissionsCount]) != PackageManager.PERMISSION_GRANTED) {
                 // Permission is not granted
                 if (!permissionsNecessary)
                     permissionsNecessary = true;
-                requiredPermissions.add( registeredPermissions[permissionsCount] );
+                requiredPermissions.add(registeredPermissions[permissionsCount]);
 
             }
         }
@@ -487,7 +555,7 @@ public class MainActivity extends AppCompatActivity {
             String[] requiredPermissionsStrArray = new String[requiredPermissions.size()];
 
             requiredPermissionsStrArray = requiredPermissions.toArray(requiredPermissionsStrArray);
-            ActivityCompat.requestPermissions( this, requiredPermissionsStrArray, PERMISSION_ALL );
+            ActivityCompat.requestPermissions(this, requiredPermissionsStrArray, PERMISSION_ALL);
         }
 
 
@@ -504,10 +572,9 @@ public class MainActivity extends AppCompatActivity {
 
 
         String criticalPermission = null;
-        for (int currGrant=0; currGrant < grantResults.length; currGrant++)
-        {
+        for (int currGrant = 0; currGrant < grantResults.length; currGrant++) {
             if (grantResults[currGrant] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText( MainActivity.this, permissions[currGrant] + " Permission Granted!", Toast.LENGTH_SHORT ).show();
+                Toast.makeText(MainActivity.this, permissions[currGrant] + " Permission Granted!", Toast.LENGTH_SHORT).show();
             } else {
                 criticalPermission = permissions[currGrant];
                 break;
@@ -517,28 +584,28 @@ public class MainActivity extends AppCompatActivity {
         if (criticalPermission != null) {
 
             final String tempPermission = criticalPermission;
-            runOnUiThread( new Runnable() {
+            runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        AlertDialog.Builder alertDialog = new AlertDialog.Builder( MainActivity.this );
-                        alertDialog.setTitle( "ERROR!!" );
-                        alertDialog.setMessage( "Application will exit as mandatory permission [" + tempPermission + "] was denied" );
-                        alertDialog.setPositiveButton( "OK",
+                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
+                        alertDialog.setTitle("ERROR!!");
+                        alertDialog.setMessage("Application will exit as mandatory permission [" + tempPermission + "] was denied");
+                        alertDialog.setPositiveButton("OK",
                                 new DialogInterface.OnClickListener() {
 
                                     @Override
                                     public void onClick(DialogInterface arg0, int arg1) {
-                                        android.os.SystemClock.sleep( 1000 );
-                                        moveTaskToBack( true );
-                                        android.os.Process.killProcess( android.os.Process.myPid() );
-                                        System.exit( 1 );
+                                        android.os.SystemClock.sleep(1000);
+                                        moveTaskToBack(true);
+                                        android.os.Process.killProcess(android.os.Process.myPid());
+                                        System.exit(1);
 
                                     }
-                                } );
+                                });
                         alertDialog.show();
                     } catch (Exception e) {
-                        Log.d( TAG, e.getMessage().toString() );
+                        Log.d(TAG, e.getMessage().toString());
                         e.printStackTrace();
                     }
 
@@ -552,16 +619,14 @@ public class MainActivity extends AppCompatActivity {
     // Handle the App pause and resume events when it is put into the background and brought into foreground.
     //
     @Override
-    public void onPause()
-    {
+    public void onPause() {
         super.onPause();
 
-        Log.d(TAG," App has paused");
+        Log.d(TAG, " App has paused");
     }
 
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
         //
         // To cater for in App Session Locking after a timeout period start the ActivityTimer
@@ -574,7 +639,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         refreshDialogStatus();
-        Log.d(TAG," App has resumed");
+        Log.d(TAG, " App has resumed");
     }
 
     //
@@ -589,7 +654,7 @@ public class MainActivity extends AppCompatActivity {
                 MASUser currentUser = MASUser.getCurrentUser();
 
                 if (currentUser != null && !currentUser.isSessionLocked()) {
-                    currentUser.lockSession( null );
+                    currentUser.lockSession(null);
                     Log.d(TAG, "User Session has been locked");
                     refreshDialogStatus();
                 }
@@ -626,7 +691,7 @@ public class MainActivity extends AppCompatActivity {
             MASUser currentUser = MASUser.getCurrentUser();
 
             if (currentUser != null && !currentUser.isSessionLocked()) {
-                currentUser.lockSession( null );
+                currentUser.lockSession(null);
                 Log.d(TAG, "User Session is locked due to deliberate locking");
                 stopInActivityTimer();
             }
